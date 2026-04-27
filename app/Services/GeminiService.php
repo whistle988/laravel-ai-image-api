@@ -9,17 +9,19 @@ class GeminiService
 {
     public function generatePromptFromImage(UploadedFile $image): string
     {
-        set_time_limit(120);
-
         $imageData = base64_encode(file_get_contents($image->getPathname()));
         $mimeType = $image->getMimeType();
 
-        //$client = new Client();
-        $client = new Client([
-            'proxy' => 'socks5h://127.0.0.1:12334',
+        $options = [
             'timeout' => 120,
             'connect_timeout' => 30,
-        ]);
+        ];
+
+        if (config('services.proxy.url')) {
+            $options['proxy'] = config('services.proxy.url');
+        }
+
+        $client = new Client($options);
 
         $response = $client->post(
             'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent',
