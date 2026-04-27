@@ -24,3 +24,7 @@ cp .env.example .env
 php artisan key:generate
 php artisan migrate
 php artisan serve
+
+## Postman Collection
+
+Import `postman/collection.json` into Postman to test the API endpoints.
